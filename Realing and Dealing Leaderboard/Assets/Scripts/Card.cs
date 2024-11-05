@@ -69,4 +69,4 @@ public class Card : MonoBehaviour
             renderer.enabled = false; // Turn off visibility
         }
     }
-}
+}//reset

@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
     public static PlayerController playerController;
     public Card card;
+    public Deck deck;
     //-----------------VARIABLES FOR GAME OBJECTS-------------------
     public List<Deck> decks = new List<Deck>();
 
@@ -130,6 +131,9 @@ public class GameManager : MonoBehaviour
         // Select the specified deck
         Deck selectedDeck = decks[deckIndex];
 
+        //For reseting deck
+        Deck deck = decks[deckIndex];
+
         //Make sure theres enough cards in the specified deck
         if (selectedDeck.cards.Count >= 1)
         {
@@ -171,6 +175,9 @@ public class GameManager : MonoBehaviour
 
                         cardCounter++;
                         Debug.Log(cardCounter);
+
+
+
                         // Update deck and discard pile UI
                         UpdateDeckUI();
 
@@ -180,6 +187,8 @@ public class GameManager : MonoBehaviour
 
                 }
             }
+        } else {
+        //ShuffleDeck(deck.cards);
         }
     }
 
@@ -208,6 +217,30 @@ public class GameManager : MonoBehaviour
     {
         skipDiscardButton.SetActive(true);//Turnn off skip discard button
     }
+
+//-----------------Reset Deck--------------------------------------------
+/*
+    private void ShuffleDeck(List<Card> cards)
+    {
+        Debug.Log("Deck is empty. Refilling from discard pile.");
+
+        // Check if the discard pile has cards to refill
+        if (deck.discardPile.Count > 0)
+        {
+            // Move all cards from the discard pile back to the deck
+            deck.cards.AddRange(deck.discardPile);
+            deck.discardPile.Clear();
+
+            // Shuffle the deck
+            ShuffleDeck(deck.cards);
+            Debug.Log("Deck refilled and shuffled.");
+        }
+        else
+        {
+            Debug.LogWarning("Cannot refill the deck; the discard pile is also empty.");
+        }
+    }
+*/
 //----------------------EVENT ACTION--------------------------------------------
 //NEEDS WORK
     public void TriggerEvent()
@@ -344,6 +377,8 @@ public class GameManager : MonoBehaviour
             winLosePanel.SetActive(true);
             outOfBaitText.gameObject.SetActive(false);
             Leaderboard.instance.SetLeaderboardEntry(playerController.points);
+            Leaderboard.instance.leaderboardCanvas.SetActive(true);
+            Leaderboard.instance.DisplayLeaderboard();
             fullHandText.text = "Boy howdy, you've reached your fishing quota!\nFinal Catch: " + playerController.points + " Trophy Points!";
         }
         else if(playerController.baitCount <= 0)
@@ -353,6 +388,8 @@ public class GameManager : MonoBehaviour
             winLosePanel.SetActive(true);
             fullHandText.gameObject.SetActive(false);
             Leaderboard.instance.SetLeaderboardEntry(playerController.points);
+            Leaderboard.instance.leaderboardCanvas.SetActive(true);
+            Leaderboard.instance.DisplayLeaderboard();
             outOfBaitText.text = "Looks like them fishies emptied your tackle box.\n Final Catch: " + playerController.points + " Trophy Points!";
         } else {
             isPlayerTurn = false;  // Set the turn flag to false when ending the turn
@@ -361,7 +398,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-
+/*
     //RESET NEVER CALLED-- Make sure to check this in Prod 4
     public void ResetGame()
     {
@@ -370,12 +407,42 @@ public class GameManager : MonoBehaviour
             deck.cards.AddRange(deck.discardPile);  // Move all discarded cards back into the deck
             deck.discardPile.Clear();  // Clear the discard pile
         }
-        
+
+            // Loop through all card slots to clear cards in hand
+        for (int i = 0; i < cardSlots.Length; i++)
+        {
+            // Check if there's a card in this slot
+            if (!availableCardSlots[i])
+            {
+                // Find the card in this slot
+                Transform cardTransform = cardSlots[i].GetChild(0);
+                if (cardTransform != null)
+                {
+                    Card cardInSlot = cardTransform.GetComponent<Card>();
+                    
+                    // Deactivate card and reset its position
+                    cardInSlot.gameObject.SetActive(false);
+                    cardInSlot.transform.SetParent(null); // Unparent from slot
+                }
+                availableCardSlots[i] = true; // Mark the slot as available again
+            }
+        }
+
+        cardCounter = 0;
+        playerController.points = 0;
+        playerController.baitCount = 3;
+
+        winLosePanel.SetActive(false);
+
         // Update UI to reflect reset
         UpdateDeckUI();
         UpdateBaitUI(playerController.baitCount);
-    }
+        UpdateTrophyPointsUI(playerController.points);
 
+
+        Awake();
+    }
+*/
 
 }
 

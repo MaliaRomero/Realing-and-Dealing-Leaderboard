@@ -16,8 +16,9 @@ public class Leaderboard : MonoBehaviour
 
     public void OnLoggedIn()
     {
-        leaderboardCanvas.SetActive(true);
-        DisplayLeaderboard();
+        //leaderboardCanvas.SetActive(true);
+        //DisplayLeaderboard();
+        Debug.Log("Logged in.");
     }
 
     public void DisplayLeaderboard ()
