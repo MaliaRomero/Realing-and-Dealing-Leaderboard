@@ -3,7 +3,7 @@
 https://maliaromero.github.io/Realing-and-Dealing-Leaderboard/
 
 
-MVP Prod 1 Changelog:
+MVP Prod 1 Changelog- View "New Art" Folder to see progress.
 
 As a competitive player, I want more high value cards, so that I can work on getting a better score.- Made shark and megalodon art
 
