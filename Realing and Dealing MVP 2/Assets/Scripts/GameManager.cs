@@ -19,6 +19,14 @@ public class GameManager : MonoBehaviour
 
     public Card card;
     public Deck deck;
+
+    //-----------------VARIABLES FOR SOUND-------------------------
+
+    //public AudioClip click;
+    //public AudioClip error;
+    //public AudioClip fishing;
+
+
     //-----------------VARIABLES FOR GAME OBJECTS-------------------
     public List<Deck> decks = new List<Deck>();
 
@@ -41,6 +49,8 @@ public class GameManager : MonoBehaviour
 
     public TextMeshProUGUI eventText;
 
+    private bool luckyFish = false;
+
     //-----------------VARIABLES FOR WIN/LOSE-------------------
     //bait count also used to check
     public int cardCounter = 0;
@@ -50,7 +60,6 @@ public class GameManager : MonoBehaviour
 
     //-------------Variables how to play----------
     public GameObject howToPanel;
-
     public GameObject goFishButton;
 
 
@@ -88,6 +97,11 @@ public class GameManager : MonoBehaviour
 //-----------------------How to play screen----------------------
     public void onGoFishClicked()
     {
+        /*
+        AudioSource audio = GetComponent<AudioSource>();
+        audio.clip = click;
+        audio.Play();
+        */
         goFishButton.SetActive(false);
         howToPanel.SetActive(false);
     }
@@ -115,6 +129,11 @@ public class GameManager : MonoBehaviour
             DrawCard(deckIndex);
         }
         else{
+                /*
+        AudioSource audio = GetComponent<AudioSource>();
+        audio.clip = error;
+        audio.Play();
+        */
             Debug.Log("Error! Not time to draw yet!");
         }
     }
@@ -151,13 +170,54 @@ public class GameManager : MonoBehaviour
             {
                 int baitCost = GetBaitCost(deckIndex);
 
-                if(playerController.baitCount < baitCost){
+                if(luckyFish == true)
+                {
+                                        /*
+                    AudioSource audio = GetComponent<AudioSource>();
+                    audio.clip = fish;//maybe new lucky fish sound?
+                    audio.Play();
+                    */
+
+                    randCard.gameObject.SetActive(true);
+                    randCard.handIndex = i;
+                    randCard.transform.position = cardSlots[i].position;
+                    availableCardSlots[i] = false;
+
+                    // Assign the deck to the card (so it knows its origin)
+                    randCard.originDeck = selectedDeck;
+                    selectedDeck.cards.Remove(randCard); // Remove from the deck
+                                        // Don't add to discard pile yet
+
+                    // Update bait count
+                    UpdateBaitUI(playerController.baitCount);
+                    luckyFish = false;
+
+                    cardCounter++;
+                    Debug.Log(cardCounter);
+
+                    // Update deck and discard pile UI
+                    UpdateDeckUI();
+                    DiscardPhase();
+                    return;
+
+                }
+                else if((playerController.baitCount < baitCost)){
+                                        /*
+                    AudioSource audio = GetComponent<AudioSource>();
+                    audio.clip = error;
+                    audio.Play();
+                    */
                     Debug.Log("Not enough Bait :( ");
                     isPlayerTurn = true; //lets the player draw again
                     return;
-                } 
+                }
                 else
                 {
+                    /*
+                    AudioSource audio = GetComponent<AudioSource>();
+                    audio.clip = fish;
+                    audio.Play();
+                    */
                     isPlayerTurn = false; //Doesn't let the player draw again
 
                     randCard.gameObject.SetActive(true);
@@ -202,10 +262,15 @@ public class GameManager : MonoBehaviour
 
     public void OnSkipDiscardClicked()
     {
-    HideSkipDiscardButton();
-    // If skipping the discard, proceed directly to the event and end the turn.
-    TriggerEvent();
-    EndTurn();
+        /*
+        AudioSource audio = GetComponent<AudioSource>();
+        audio.clip = click;
+        audio.Play();
+        */
+        HideSkipDiscardButton();
+        // If skipping the discard, proceed directly to the event and end the turn.
+        TriggerEvent();
+        EndTurn();
     }
 
     public void HideSkipDiscardButton ()
@@ -282,6 +347,7 @@ public class GameManager : MonoBehaviour
         eventText.text = "Lucky Catch: Draw an additional card for free!";
         eventText.gameObject.SetActive(true);
         // Allow player to draw a card without using bait
+        luckyFish = true;
         isPlayerTurn = true; // Temporarily allow drawing
     }
 
