@@ -3,6 +3,8 @@
 https://maliaromero.github.io/Realing-and-Dealing-Leaderboard/
 
 
+
+
 MVP Prod 2 Changelog
 
 
@@ -24,7 +26,10 @@ As a player who is confused on what I’m clicking on, I want a darker color whe
 As a confused player, I want a how to play screen, so that I know what’s going on. (Implement new how to play screens and button)
 
 
+
+
 MVP Prod 1 Changelog- View "New Art" Folder to see progress.
+
 
 As a competitive player, I want more high value cards, so that I can work on getting a better score.- Made shark and megalodon art
 
